@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1547535196007.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C6223AB9",
+    "lastKnownWriteTime" : 23362624930447362,
+    "last_content_update" : 1547535196007,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "53D63CB4",
+        "caption" : "JobProficiency",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=JobProficiency&cache_key=53D63CB4",
+        "displayedObservations" : "25",
+        "environment" : "",
+        "object" : "JobProficiency",
+        "preview" : "0",
+        "totalObservations" : "25",
+        "variables" : "5"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

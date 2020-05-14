@@ -1,0 +1,123 @@
+---
+title: "HW 5 Code"
+author: "Jared Yu"
+date: "February 26, 2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, eval=FALSE}
+### 1
+# a
+0.6*(2.5-0)+0.8*0.5
+0.6*(1.9-0)
+0.6*(1.14-0)
+
+# b
+15 + 0.6*(2.5-15)+0.8*0.5
+15 + 0.6*(7.9-15)+0.8*0
+15 + 0.6*(10.74-15)+0.8*0
+
+# c
+0.01+0.6*(2.5-0.01)+0.8*0.5
+0.01+0.6*(2.5-0.01)+0.8*0.5 + 7.5
+
+0.01+0.6*(1.904-0.01)+0.8*0
+0.01+0.6*(1.904-0.01)+0.8*0 + 9.404
+
+0.01+0.6*(1.1464-0.01)+0.8*0
+0.01+0.6*(1.1464-0.01)+0.8*0 + 10.5504
+
+### 2
+# a
+0+0.6*(2.5-0)+(-0.8)*(-0.3)+0.5*(0.5)
+0+0.6*(1.99-0)+(-0.8)*(0)+0.5*(-0.3)
+0+0.6*(1.044-0)+(-0.8)*(0)+0.5*(0)
+
+# b
+15+0.6*(2.5-15)+(-0.8)*(-0.3)+0.5*(0.5)
+15+0.6*(7.99-15)+(-0.8)*(0)+0.5*(-0.3)
+15+0.6*(10.644-15)+(-0.8)*(0)+0.5*(0)
+
+# c
+0.01+0.6*(2.5-0.01)+(-0.8)*(-0.3)+0.5*(0.5)
+0.01+0.6*(2.5-0.01)+(-0.8)*(-0.3)+0.5*(0.5) + 7.5
+
+0.01+0.6*(1.994-0.01)+(-0.8)*0+0.5*(-0.3)
+0.01+0.6*(1.994-0.01)+(-0.8)*0+0.5*(-0.3) + 9.494
+
+0.01+0.6*(1.0504-0.01)+(-0.8)*0+0.5*(0)
+0.01+0.6*(1.0504-0.01)+(-0.8)*0+0.5*(0) + 10.5444
+
+### 3
+# a
+par(mfrow=c(2,1))
+jmax <- 30
+lags <- 0:jmax
+rhos <- ARMAacf(ar = c(0.4, 0.5), lag.max = jmax)
+plot(lags, rhos, pch = 19, xlab = "Lag", ylab = "ACF", ylim = c(-0.01, 1.1), 
+     main = 'ACF of AR(2) theta1=0.4, theta2=0.5')
+segments(x0 = lags, y0 = 0, x1 = lags, y1 = rhos)
+abline(h = 0)
+
+rhos2 <- ARMAacf(ar = c(0.4, 0.5), lag.max = jmax, pacf = TRUE)
+lags2 <- 1:jmax
+plot(lags2, rhos2, pch = 19, xlab = "Lag", ylab = "PACF", 
+     main = 'PACF of AR(2) theta1=0.4, theta2=0.5')
+segments(x0 = lags2, y0 = 0, x1 = lags2, y1 = rhos2)
+abline(h = 0)
+
+# b
+rhos3 <- ARMAacf(ar = c(-0.4, 0.5), lag.max = jmax)
+plot(lags, rhos3, pch = 19, xlab = "Lag", ylab = "ACF", 
+     main = 'ACF of AR(2) theta1=-0.4, theta2=0.5')
+segments(x0 = lags, y0 = 0, x1 = lags, y1 = rhos3)
+abline(h = 0)
+
+rhos4 <- ARMAacf(ar = c(-0.4, 0.5), lag.max = jmax, pacf = TRUE)
+plot(lags2, rhos4, pch = 19, xlab = "Lag", ylab = "PACF", 
+     main = 'PACF of AR(2) theta1=-0.4, theta2=0.5')
+segments(x0 = lags2, y0 = 0, x1 = lags2, y1 = rhos4)
+abline(h = 0)
+
+# c
+rhos5 <- ARMAacf(ar = c(1.5, -0.8), lag.max = jmax)
+plot(lags, rhos5, pch = 19, xlab = "Lag", ylab = "ACF", 
+     main = 'ACF of AR(2) theta1=1.5, theta2=-0.8')
+segments(x0 = lags, y0 = 0, x1 = lags, y1 = rhos5)
+abline(h = 0)
+
+rhos6 <- ARMAacf(ar = c(1.5, -0.8), lag.max = jmax, pacf = TRUE)
+plot(lags2, rhos6, pch = 19, xlab = "Lag", ylab = "PACF", 
+     main = 'PACF of AR(2) theta1=1.5, theta2=-0.8')
+segments(x0 = lags2, y0 = 0, x1 = lags2, y1 = rhos6)
+abline(h = 0)
+
+# d
+rhos7 <- ARMAacf(ar = c(-1.5, -0.8), lag.max = jmax)
+plot(lags, rhos7, pch = 19, xlab = "Lag", ylab = "ACF", 
+     main = 'ACF of AR(2) theta1=-1.5, theta2=-0.8')
+segments(x0 = lags, y0 = 0, x1 = lags, y1 = rhos7)
+abline(h = 0)
+
+rhos8 <- ARMAacf(ar = c(-1.5, -0.8), lag.max = jmax, pacf = TRUE)
+plot(lags2, rhos8, pch = 19, xlab = "Lag", ylab = "PACF", 
+     main = 'PACF of AR(2) theta1=-1.5, theta2=-0.8')
+segments(x0 = lags2, y0 = 0, x1 = lags2, y1 = rhos8)
+abline(h = 0)
+
+# e
+rhos9 <- ARMAacf(ar = c(-1.5, -0.8), ma = c(-1.2, 0.3), lag.max = jmax)
+plot(lags, rhos9, pch = 19, xlab = "Lag", ylab = "ACF", 
+     main = 'ACF of ARMA(2,2) theta1=-1.5, theta2=0.3, phi1=-1.2, phi2=0.3')
+segments(x0 = lags, y0 = 0, x1 = lags, y1 = rhos9)
+abline(h = 0)
+
+rhos10 <- ARMAacf(ar = c(-1.5, -0.8), ma = c(-1.2, 0.3), lag.max = jmax, pacf = TRUE)
+plot(lags2, rhos10, pch = 19, xlab = "Lag", ylab = "PACF", 
+     main = 'PACF of ARMA(2,2) theta1=-1.5, theta2=0.3, phi1=-1.2, phi2=0.3')
+segments(x0 = lags2, y0 = 0, x1 = lags2, y1 = rhos10)
+abline(h = 0)
+```
+

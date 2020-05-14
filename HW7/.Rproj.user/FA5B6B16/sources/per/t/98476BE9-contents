@@ -1,0 +1,94 @@
+---
+title: "Homework 7 Code"
+author: "Jared Yu"
+date: "March 14, 2019"
+output: pdf_document
+---
+
+```{r, eval=FALSE}
+library(xlsx); library(astsa) # Load libraries
+global_temp <- read.xlsx('GlobalTemp_NASA.xlsx', sheetIndex = 1) # Load data
+
+X_t <- diff(global_temp$Temp.Anomaly) # First differenced data
+
+par(mfrow=c(2,2))
+# plot periodogram of X_t
+p_0 <- spec.pgram(X_t, log = 'no', 
+                  main = 'Periodogram of First Differenced Series', ylim = c(0,0.07))
+# 3 smoothed periodogram (modified Daniell) spans 5, 15, 25
+p_5 <- spec.pgram(x = X_t, spans = 5, log = 'no',
+                  main = 'Smoothed Periodogram, span = 5', ylim = c(0,0.07))
+p_15 <- spec.pgram(x = X_t, spans = 15, log = 'no', 
+                   main = 'Smoothed Periodogram, span = 15', ylim = c(0,0.07))
+p_25 <- spec.pgram(x = X_t, spans = 25, log = 'no', 
+                   main = 'Smoothed Periodogram, span = 25', ylim = c(0,0.07))
+dev.off()
+
+### 1 b
+specselect=function(y,kmax){
+  # Obtains the values of the criterion function for
+  # obtaining the the optimal number of neighbors for
+  # spectral density estimate for modified Daniell's method.
+  # input: y, observed series; kmax=max number of nighbors to
+  # be considered
+  # output: ctr - the criterion function
+  # output: kopt - the value of k at which the criterion function
+  # is minimized
+  ii=spec.pgram(y,log="no",plot=FALSE)
+  ii=ii$spec
+  cc=norm(as.matrix(ii),type="F")^2
+  ctr=rep(1,kmax)
+  for(k in 1:kmax) {
+    ss=2*k+1; kk=1/(2*k)
+    ff=spec.pgram(y,spans=ss,log="no",plot=FALSE)
+    fspec=ff$spec
+    ctr[k]=norm(as.matrix(ii-fspec),type="F")^2+kk*cc
+  }
+  kopt=which.min(ctr)
+  result=list(ctr=ctr,kopt=kopt)
+  return(result)
+}
+
+# a = specselect(X_t, kmax = 12)
+# plot(1:12, a$ctr, type = 'l')
+
+### 1 c
+fit <- arima(X_t, order = c(2,0,2))
+arma_fit <- arma.spec(ar = fit$coef[1:2], ma = fit$coef[3:4], 
+                      log = 'no', var.noise = fit$sigma2)
+p_7 <- spec.pgram(x = X_t, spans = 2*7+1, log = 'no', 
+                  main = 'Smoothed Periodogram, span = 15', ylim = c(0,0.03))
+lines(arma_fit$freq, arma_fit$spec)
+
+### 2 c
+w = seq(from = -0.5, to = 0.5, by = 0.01)
+sdf <- function(w) {
+  2.98 + 2.8*cos(2*pi*w)  
+}
+sdf2 <- function(w) {
+  3.16-0.36*cos(2*pi*w)-2.8*cos(4*pi*w)
+}
+
+sdf_y_lim <- range(range(sdf(w)), range(sdf2(w)))
+sdf_y_lim[1] <- sdf_y_lim[1] - 0.1
+sdf_y_lim[2] <- sdf_y_lim[2] + 0.1
+
+plot(w, sdf(w), type = 'l', ylim = sdf_y_lim, 
+     main = 'Spectral Density of X_t and Differenced X_t', 
+     xlab = 'Frequency', ylab = 'Spectrum')
+lines(w, sdf2(w), type = 'l', col = 'red', lty = 2)
+legend('bottomleft', legend = c('X_t', 'differenced X_t'), 
+       col = c('black', 'red'), lty = c(1,2))
+
+
+### 3 b
+sdf3 <- function(w) {
+  (2/3) * (1 + 4*cos(2*pi*w) + 4*cos(2*pi*w)^2)
+}
+plot(w, sdf3(w), type = 'l', main = 'Spectral Density of White Noise with Variance = 2',
+     xlab = 'Frequency', ylab = 'Spectrum')
+abline(h = 2, col = 'red', lty = 2)
+legend('topleft', legend = c('Z_t', 'X_t'), lty = c(1,2), col = c('black', 'red'))
+
+```
+
